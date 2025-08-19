@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-import { emailOTP, openAPI } from "better-auth/plugins";
+import { emailOTP } from "better-auth/plugins";
 import { Pool } from "pg";
 import { Redis } from "ioredis";
 import { Resend } from "resend";
