@@ -1,20 +1,30 @@
-import { Hono } from 'hono'
-import { auth } from './lib/auth'
-import { logger } from 'hono/logger'
-const app = new Hono()
+import { Hono } from "hono";
+import { auth } from "./lib/auth";
+import { logger } from "hono/logger";
+import { cors } from "hono/cors";
 
-app.use(logger())
+const app = new Hono();
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+// CORS configuration for mobile and web access
+app.use(cors({
+  origin: ["http://localhost:3000", "http://localhost:5173", "capacitor://localhost", "ionic://localhost"],
+  credentials: true,
+  allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowHeaders: ["Content-Type", "Authorization", "Cookie"],
+}));
 
-app.get('/health', (c) => {
+app.use(logger());
+
+app.get("/", (c) => {
+  return c.text("Hello Hono!");
+});
+
+app.get("/health", (c) => {
   return c.json({
-    status: 'ok',
-    timestamp: new Date().toISOString()
-  })
-})
+    status: "ok",
+    timestamp: new Date().toISOString(),
+  });
+});
 
 /**
  * Better Auth routes, see docs before changing
@@ -22,4 +32,4 @@ app.get('/health', (c) => {
  */
 app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
-export default app
+export default app;
