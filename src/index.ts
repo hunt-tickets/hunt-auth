@@ -32,7 +32,4 @@ app.get("/health", (c) => {
  */
 app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
-export default {
-  port: 3001,
-  fetch: app.fetch,
-};
+export default app;

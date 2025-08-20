@@ -71,8 +71,8 @@ export const auth = betterAuth({
       maxAge: 5 * 60,
     },
     cookieAttributes: {
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Allow cross-origin in production, lax for development
-      secure: process.env.NODE_ENV === "production", // Only require HTTPS in production
+      sameSite: "none", // Allow cross-origin cookies
+      secure: true, // Required for SameSite=none in production
       httpOnly: true, // Security
     },
   },
@@ -584,9 +584,9 @@ export const auth = betterAuth({
       allowedAttempts: 3,
     }),
     passkey({
-      rpID: process.env.NODE_ENV === "production" ? "auth.hunt-tickets.com" : "localhost",
+      rpID: "auth.hunt-tickets.com",
       rpName: "Hunt Tickets Auth",
-      origin: process.env.NODE_ENV === "production" ? "https://auth.hunt-tickets.com" : "http://localhost:3001",
+      origin: "https://auth.hunt-tickets.com",
       authenticatorSelection: {
         authenticatorAttachment: "platform",
         residentKey: "preferred",
