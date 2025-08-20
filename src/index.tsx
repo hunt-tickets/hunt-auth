@@ -2,6 +2,9 @@ import { Hono } from "hono";
 import { auth } from "./lib/auth";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
+import { jsxRenderer } from "hono/jsx-renderer";
+import { AuthLayout } from "./components/layouts/AuthLayout";
+import { SignInPage } from "./components/auth/SignInPage";
 
 const app = new Hono();
 
@@ -24,6 +27,20 @@ app.get("/health", (c) => {
     status: "ok",
     timestamp: new Date().toISOString(),
   });
+});
+
+// JSX renderer middleware for auth pages
+app.get('/auth/*', jsxRenderer(({ children }) => (
+  <AuthLayout>{children}</AuthLayout>
+)));
+
+// Auth pages
+app.get('/auth/signin', (c) => {
+  return c.render(<SignInPage />);
+});
+
+app.get('/auth/signup', (c) => {
+  return c.html('<h1>Sign Up page coming soon</h1>');
 });
 
 /**

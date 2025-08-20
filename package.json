@@ -1,8 +1,8 @@
 {
   "name": "auth-server",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "build": "bun build ./src/index.ts --compile --outfile server",
+    "dev": "bun run --hot src/index.tsx",
+    "build": "bun build ./src/index.tsx --compile --outfile server",
     "start": "./server"
   },
   "dependencies": {

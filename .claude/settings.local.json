@@ -4,7 +4,9 @@
       "WebFetch(domain:www.better-auth.com)",
       "WebSearch",
       "Bash(bun add:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(bun run:*)"
     ],
     "deny": [],
     "ask": [],
