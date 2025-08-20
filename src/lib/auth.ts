@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { emailOTP } from "better-auth/plugins";
+import { passkey } from "better-auth/plugins/passkey";
 import { Pool } from "pg";
 import { Redis } from "ioredis";
 import { Resend } from "resend";
@@ -27,7 +28,8 @@ async function sendEmail({
     }
 
     const { data, error } = await resend.emails.send({
-      from: process.env.FROM_EMAIL || "Hunt Auth <team@support.hunttickets.com>",
+      from:
+        process.env.FROM_EMAIL || "Hunt Auth <team@support.hunttickets.com>",
       to: [to],
       subject,
       html,
@@ -575,6 +577,16 @@ export const auth = betterAuth({
       otpLength: 6,
       expiresIn: 300, // 5 minutos
       allowedAttempts: 3,
+    }),
+    passkey({
+      rpID: "auth.hunt-tickets.com",
+      rpName: "Hunt Tickets Auth",
+      origin: "https://auth.hunt-tickets.com",
+      authenticatorSelection: {
+        authenticatorAttachment: "platform",
+        residentKey: "preferred",
+        userVerification: "preferred",
+      },
     }),
   ],
   // DB config
