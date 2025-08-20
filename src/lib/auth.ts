@@ -71,7 +71,7 @@ export const auth = betterAuth({
       maxAge: 5 * 60,
     },
     cookieAttributes: {
-      sameSite: "lax", // Changed to lax for localhost testing
+      sameSite: "none", // Allow cross-origin cookies for localhost testing
       secure: false, // Allow HTTP for localhost testing
       httpOnly: true, // Security
     },
