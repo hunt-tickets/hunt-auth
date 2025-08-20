@@ -581,7 +581,7 @@ export const auth = betterAuth({
     passkey({
       rpID: "auth.hunt-tickets.com",
       rpName: "Hunt Tickets Auth",
-      origin: "https://auth.hunt-tickets.com",
+      origin: ["https://auth.hunt-tickets.com", "http://127.0.0.1:5500", "http://localhost:5500"],
       authenticatorSelection: {
         authenticatorAttachment: "platform",
         residentKey: "preferred",

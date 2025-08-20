@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:www.better-auth.com)",
       "WebSearch",
-      "Bash(bun add:*)"
+      "Bash(bun add:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []

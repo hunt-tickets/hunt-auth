@@ -7,7 +7,7 @@ const app = new Hono();
 
 // CORS configuration for mobile and web access
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:5173", "capacitor://localhost", "ionic://localhost"],
+  origin: ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:5500", "http://localhost:5500", "capacitor://localhost", "ionic://localhost"],
   credentials: true,
   allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowHeaders: ["Content-Type", "Authorization", "Cookie"],
