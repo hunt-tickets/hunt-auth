@@ -74,9 +74,10 @@ export const auth = betterAuth({
       maxAge: 5 * 60,
     },
     cookieAttributes: {
-      sameSite: "none", // Allow cross-origin cookies for localhost testing
-      secure: false, // Allow HTTP for localhost testing
-      httpOnly: true, // Security
+      domain: process.env.NODE_ENV === "production" ? ".hunt-tickets.com" : undefined,
+      sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
     },
   },
   // Add your plugins here
