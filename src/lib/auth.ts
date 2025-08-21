@@ -74,12 +74,21 @@ export const auth = betterAuth({
       maxAge: 5 * 60,
     },
     cookieAttributes: {
-      domain: process.env.NODE_ENV === "production" ? ".hunt-tickets.com" : undefined,
+      domain:
+        process.env.NODE_ENV === "production" ? ".hunt-tickets.com" : undefined,
       sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
     },
   },
+
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
+  },
+
   // Add your plugins here
   plugins: [
     emailOTP({
