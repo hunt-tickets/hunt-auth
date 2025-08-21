@@ -78,6 +78,22 @@ app.get("/api/auth/validate", async (c) => {
   }
 });
 
+// Server-side Google OAuth initiation
+app.post("/api/auth/google-signin", async (c) => {
+  try {
+    const result = await auth.api.signInSocial({
+      body: {
+        provider: "google",
+      },
+    });
+    
+    return c.json(result);
+  } catch (error) {
+    console.error("Google sign-in error:", error);
+    return c.json({ error: "Failed to initiate Google sign-in" }, 500);
+  }
+});
+
 // User profile page to test auth flow
 app.get("/profile", async (c) => {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });

@@ -131,11 +131,25 @@ class AuthForm {
   }
 }
 
-// Google OAuth sign in function
+// Google OAuth sign in function using server-side endpoint
 async function signInWithGoogle() {
   try {
-    // Redirect to Google OAuth endpoint
-    window.location.href = 'https://auth.hunt-tickets.com/api/auth/callback/google';
+    const response = await fetch('/api/auth/google-signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      // If there's a redirect URL, follow it
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } else {
+      throw new Error('Failed to initiate Google sign in');
+    }
   } catch (error) {
     console.error('Google sign in failed:', error);
     
