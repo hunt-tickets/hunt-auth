@@ -264,6 +264,6 @@ app.get("/profile", async (c) => {
  * Better Auth routes, see docs before changing
  * @link https://better-auth.com/docs
  */
-app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
+app.on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw));
 
 export default app;
