@@ -11,7 +11,8 @@ export const SignInPage: FC = () => {
       <div class="auth-methods">
         <div class="email-otp-section">
           <h3>Sign in with Email</h3>
-          <form method="POST" action="/api/auth/sign-in/email-otp">
+          <form id="email-form" method="POST" action="/api/auth/email-otp/send-verification-otp">
+            <input type="hidden" name="type" value="sign-in" />
             <div class="form-group">
               <label for="email">Email address</label>
               <input 
@@ -26,6 +27,26 @@ export const SignInPage: FC = () => {
               Send verification code
             </button>
           </form>
+          
+          <div id="otp-section" style="display: none; margin-top: 1rem;">
+            <form method="POST" action="/api/auth/sign-in/email-otp">
+              <input type="hidden" id="verified-email" name="email" />
+              <div class="form-group">
+                <label for="otp">Verification code</label>
+                <input 
+                  type="text" 
+                  id="otp" 
+                  name="otp" 
+                  required 
+                  placeholder="Enter 6-digit code"
+                  maxlength="6"
+                />
+              </div>
+              <button type="submit" class="btn-primary">
+                Sign in
+              </button>
+            </form>
+          </div>
         </div>
         
         <div class="divider">
@@ -196,6 +217,41 @@ export const SignInPage: FC = () => {
           text-decoration: underline;
         }
       `}</style>
+      
+      <script>{`
+        document.getElementById('email-form').addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          const formData = new FormData(this);
+          const email = formData.get('email');
+          
+          try {
+            const response = await fetch('/api/auth/email-otp/send-verification-otp', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email: email,
+                type: 'sign-in'
+              })
+            });
+            
+            if (response.ok) {
+              // Show OTP section
+              document.getElementById('otp-section').style.display = 'block';
+              document.getElementById('verified-email').value = email;
+              document.getElementById('email-form').style.display = 'none';
+              alert('Verification code sent to your email!');
+            } else {
+              const error = await response.text();
+              alert('Error: ' + error);
+            }
+          } catch (error) {
+            alert('Network error: ' + error.message);
+          }
+        });
+      `}</script>
     </div>
   );
 };
