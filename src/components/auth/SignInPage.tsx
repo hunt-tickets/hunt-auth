@@ -8,11 +8,12 @@ export const SignInPage: FC = () => {
         <p>Sign in to your account to continue</p>
       </div>
       
+      <div id="error-message" class="error-message" style="display: none;"></div>
+      
       <div class="auth-methods">
         <div class="email-otp-section">
           <h3>Sign in with Email</h3>
-          <form id="email-form" method="POST" action="/api/auth/email-otp/send-verification-otp">
-            <input type="hidden" name="type" value="sign-in" />
+          <form id="email-form">
             <div class="form-group">
               <label for="email">Email address</label>
               <input 
@@ -23,13 +24,14 @@ export const SignInPage: FC = () => {
                 placeholder="Enter your email"
               />
             </div>
-            <button type="submit" class="btn-primary">
+            <button type="submit" id="email-btn" class="btn-primary">
               Send verification code
             </button>
           </form>
           
           <div id="otp-section" style="display: none; margin-top: 1rem;">
-            <form method="POST" action="/api/auth/sign-in/email-otp">
+            <p class="otp-instruction">Enter the 6-digit code sent to your email</p>
+            <form id="otp-form">
               <input type="hidden" id="verified-email" name="email" />
               <div class="form-group">
                 <label for="otp">Verification code</label>
@@ -38,12 +40,16 @@ export const SignInPage: FC = () => {
                   id="otp" 
                   name="otp" 
                   required 
-                  placeholder="Enter 6-digit code"
+                  placeholder="000000"
                   maxlength="6"
+                  pattern="[0-9]{6}"
                 />
               </div>
-              <button type="submit" class="btn-primary">
+              <button type="submit" id="otp-btn" class="btn-primary">
                 Sign in
+              </button>
+              <button type="button" id="back-btn" class="btn-secondary">
+                ← Back to email
               </button>
             </form>
           </div>
@@ -216,42 +222,52 @@ export const SignInPage: FC = () => {
         .auth-footer a:hover {
           text-decoration: underline;
         }
+        
+        .error-message {
+          background-color: #fee2e2;
+          color: #dc2626;
+          padding: 0.75rem;
+          border-radius: 8px;
+          margin-bottom: 1rem;
+          font-size: 0.875rem;
+          border: 1px solid #fecaca;
+        }
+        
+        .otp-instruction {
+          color: #6b7280;
+          font-size: 0.875rem;
+          margin-bottom: 1rem;
+          text-align: center;
+        }
+        
+        .btn-secondary {
+          width: 100%;
+          background: #f9fafb;
+          color: #374151;
+          border: 1px solid #d1d5db;
+          padding: 0.75rem 1rem;
+          border-radius: 8px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          cursor: pointer;
+          margin-top: 0.5rem;
+          transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+          background: #f3f4f6;
+          border-color: #9ca3af;
+        }
+        
+        #otp {
+          text-align: center;
+          letter-spacing: 0.5em;
+          font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+          font-size: 1.25rem;
+        }
       `}</style>
       
-      <script>{`
-        document.getElementById('email-form').addEventListener('submit', async function(e) {
-          e.preventDefault();
-          
-          const formData = new FormData(this);
-          const email = formData.get('email');
-          
-          try {
-            const response = await fetch('/api/auth/email-otp/send-verification-otp', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email: email,
-                type: 'sign-in'
-              })
-            });
-            
-            if (response.ok) {
-              // Show OTP section
-              document.getElementById('otp-section').style.display = 'block';
-              document.getElementById('verified-email').value = email;
-              document.getElementById('email-form').style.display = 'none';
-              alert('Verification code sent to your email!');
-            } else {
-              const error = await response.text();
-              alert('Error: ' + error);
-            }
-          } catch (error) {
-            alert('Network error: ' + error.message);
-          }
-        });
-      `}</script>
+      <script src="/js/auth.js"></script>
     </div>
   );
 };

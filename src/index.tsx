@@ -3,6 +3,7 @@ import { auth } from "./lib/auth";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import { jsxRenderer } from "hono/jsx-renderer";
+import { serveStatic } from "hono/bun";
 import { AuthLayout } from "./components/layouts/AuthLayout";
 import { SignInPage } from "./components/auth/SignInPage";
 
@@ -17,6 +18,9 @@ app.use(cors({
 }));
 
 app.use(logger());
+
+// Serve static files
+app.use('/js/*', serveStatic({ root: './src/public' }));
 
 app.get("/", (c) => {
   return c.text("Hello Hono!");
