@@ -33,6 +33,37 @@ app.get("/health", (c) => {
   });
 });
 
+// Authentication check endpoint for client applications
+app.get("/api/auth/check", async (c) => {
+  try {
+    const session = await auth.api.getSession({ headers: c.req.raw.headers });
+    
+    if (session) {
+      return c.json({ 
+        authenticated: true, 
+        user: session.user,
+        session: session.session 
+      });
+    } else {
+      const redirectUri = c.req.query('redirect_uri');
+      const authUrl = redirectUri 
+        ? `/auth/signin?redirect_uri=${encodeURIComponent(redirectUri)}`
+        : '/auth/signin';
+        
+      return c.json({ 
+        authenticated: false,
+        authUrl 
+      }, 401);
+    }
+  } catch (error) {
+    return c.json({ 
+      authenticated: false, 
+      error: 'Authentication check failed',
+      authUrl: '/auth/signin'
+    }, 500);
+  }
+});
+
 // JSX renderer middleware for auth pages
 app.get('/auth/*', jsxRenderer(({ children }) => (
   <AuthLayout>{children}</AuthLayout>
@@ -40,11 +71,13 @@ app.get('/auth/*', jsxRenderer(({ children }) => (
 
 // Auth pages
 app.get('/auth/signin', (c) => {
-  return c.render(<SignInPage />);
+  const redirectUri = c.req.query('redirect_uri') || '/';
+  return c.render(<SignInPage redirectUri={redirectUri} />);
 });
 
 app.get('/auth/signup', (c) => {
-  return c.html('<h1>Sign Up page coming soon</h1>');
+  const redirectUri = c.req.query('redirect_uri') || '/';
+  return c.html(`<h1>Sign Up page coming soon</h1><p>After signup, you'll be redirected to: ${redirectUri}</p>`);
 });
 
 /**

@@ -1,6 +1,10 @@
 import type { FC } from "hono/jsx";
 
-export const SignInPage: FC = () => {
+interface SignInPageProps {
+  redirectUri?: string;
+}
+
+export const SignInPage: FC<SignInPageProps> = ({ redirectUri = '/' }) => {
   return (
     <div>
       <div class="auth-header">
@@ -267,6 +271,7 @@ export const SignInPage: FC = () => {
         }
       `}</style>
       
+      <script>{`window.AUTH_REDIRECT_URI = ${JSON.stringify(redirectUri)};`}</script>
       <script src="/js/auth.js"></script>
     </div>
   );

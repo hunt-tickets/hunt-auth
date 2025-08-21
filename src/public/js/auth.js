@@ -7,7 +7,7 @@ class AuthForm {
       error: null
     };
     
-    this.redirectUri = new URLSearchParams(window.location.search).get('redirect_uri') || '/';
+    this.redirectUri = window.AUTH_REDIRECT_URI || '/';
     this.init();
   }
 
@@ -99,17 +99,17 @@ class AuthForm {
   }
 
   render() {
-    const emailSection = document.getElementById('email-form').parentElement;
+    const emailForm = document.getElementById('email-form');
     const otpSection = document.getElementById('otp-section');
     const submitBtns = document.querySelectorAll('button[type="submit"]');
     const errorElement = document.getElementById('error-message');
 
     // Update visibility
     if (this.state.step === 'email') {
-      emailSection.style.display = 'block';
+      emailForm.style.display = 'block';
       otpSection.style.display = 'none';
     } else {
-      emailSection.style.display = 'none';
+      emailForm.style.display = 'none';
       otpSection.style.display = 'block';
     }
 
