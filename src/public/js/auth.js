@@ -76,7 +76,7 @@ class AuthForm {
     this.setState({ loading: true, error: null });
     
     try {
-      const response = await fetch('/api/auth/sign-in/email-otp', {
+      const response = await fetch('/api/auth/email-otp/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp })
