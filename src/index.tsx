@@ -84,6 +84,7 @@ app.post("/api/auth/google-signin", async (c) => {
     const result = await auth.api.signInSocial({
       body: {
         provider: "google",
+        callbackURL: `${new URL(c.req.url).origin}/api/auth/callback/google`,
       },
     });
     
