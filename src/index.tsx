@@ -49,6 +49,13 @@ app.get(
   jsxRenderer(({ children }) => <AuthLayout>{children}</AuthLayout>)
 );
 
+/**
+ * Better Auth routes, see docs before changing
+ * @link https://better-auth.com/docs
+ */
+// Better Auth handler must come before specific auth routes to avoid conflicts
+app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
+
 // Auth pages
 app.get("/auth/signin", (c) => {
   const redirectUri = c.req.query("redirect_uri") || "/";
@@ -259,12 +266,5 @@ app.get("/profile", async (c) => {
     </html>
   `);
 });
-
-/**
- * Better Auth routes, see docs before changing
- * @link https://better-auth.com/docs
- */
-// The route pattern /api/auth/* only matches one level deep, but Google OAuth needs /api/auth/sign-in/social/google which is three levels deep.
-app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
 export default app;
