@@ -135,7 +135,7 @@ class AuthForm {
 async function signInWithGoogle() {
   try {
     // Redirect to Google OAuth endpoint
-    window.location.href = '/api/auth/sign-in/social/google';
+    window.location.href = 'https://auth.hunt-tickets.com/api/auth/sign-in/social/google';
   } catch (error) {
     console.error('Google sign in failed:', error);
     
