@@ -16,8 +16,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:3001",
-      "http://localhost:3000", 
-      "https://*.hunt-tickets.com"
+      "http://localhost:3000",
+      "https://*.hunt-tickets.com",
     ],
     allowHeaders: ["Content-Type", "Authorization", "Cookie"],
     allowMethods: ["POST", "GET", "OPTIONS"],
@@ -59,19 +59,19 @@ app.get("/auth/signin", (c) => {
 app.get("/api/auth/validate", async (c) => {
   try {
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
-    
+
     if (!session) {
       return c.json({ valid: false, error: "No session found" }, 401);
     }
-    
-    return c.json({ 
-      valid: true, 
-      user: session.user, 
+
+    return c.json({
+      valid: true,
+      user: session.user,
       session: {
         id: session.session.id,
         userId: session.session.userId,
-        expiresAt: session.session.expiresAt
-      }
+        expiresAt: session.session.expiresAt,
+      },
     });
   } catch (error) {
     return c.json({ valid: false, error: "Session validation failed" }, 401);
@@ -81,11 +81,11 @@ app.get("/api/auth/validate", async (c) => {
 // User profile page to test auth flow
 app.get("/profile", async (c) => {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
-  
+
   if (!session) {
     return c.redirect("/auth/signin?redirect_uri=/profile");
   }
-  
+
   return c.html(`
     <!DOCTYPE html>
     <html>
@@ -184,11 +184,11 @@ app.get("/profile", async (c) => {
             </tr>
             <tr>
               <th>Name</th>
-              <td>${session.user.name || 'Not provided'}</td>
+              <td>${session.user.name || "Not provided"}</td>
             </tr>
             <tr>
               <th>Email Verified</th>
-              <td>${session.user.emailVerified ? '✅ Yes' : '❌ No'}</td>
+              <td>${session.user.emailVerified ? "✅ Yes" : "❌ No"}</td>
             </tr>
             <tr>
               <th>Account Created</th>
@@ -210,11 +210,11 @@ app.get("/profile", async (c) => {
             </tr>
             <tr>
               <th>IP Address</th>
-              <td>${session.session.ipAddress || 'Not available'}</td>
+              <td>${session.session.ipAddress || "Not available"}</td>
             </tr>
             <tr>
               <th>User Agent</th>
-              <td>${session.session.userAgent || 'Not available'}</td>
+              <td>${session.session.userAgent || "Not available"}</td>
             </tr>
             <tr>
               <th>Session Created</th>
@@ -264,6 +264,7 @@ app.get("/profile", async (c) => {
  * Better Auth routes, see docs before changing
  * @link https://better-auth.com/docs
  */
+// The route pattern /api/auth/* only matches one level deep, but Google OAuth needs /api/auth/sign-in/social/google which is three levels deep.
 app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
 export default app;
