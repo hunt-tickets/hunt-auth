@@ -75,7 +75,7 @@ export const SignInPage: FC<SignInPageProps> = ({ redirectUri = "/" }) => {
             <small>(Coming soon)</small>
           </button>
 
-          <button class="btn-google" disabled>
+          <button class="btn-google" onclick="signInWithGoogle()">
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"
@@ -95,7 +95,6 @@ export const SignInPage: FC<SignInPageProps> = ({ redirectUri = "/" }) => {
               />
             </svg>
             Continue with Google
-            <small>(Coming soon)</small>
           </button>
 
           <button class="btn-apple" disabled>
@@ -202,8 +201,6 @@ export const SignInPage: FC<SignInPageProps> = ({ redirectUri = "/" }) => {
           border: 1px solid #e5e7eb;
           border-radius: 8px;
           background: white;
-          cursor: not-allowed;
-          opacity: 0.6;
           transition: all 0.2s;
           display: flex;
           align-items: center;
@@ -212,6 +209,21 @@ export const SignInPage: FC<SignInPageProps> = ({ redirectUri = "/" }) => {
           font-size: 0.875rem;
           font-weight: 500;
           color: #374151;
+        }
+        
+        .btn-passkey, .btn-apple {
+          cursor: not-allowed;
+          opacity: 0.6;
+        }
+        
+        .btn-google {
+          cursor: pointer;
+          opacity: 1;
+        }
+        
+        .btn-google:hover {
+          background: #f9fafb;
+          border-color: #d1d5db;
         }
         
         .btn-google svg {

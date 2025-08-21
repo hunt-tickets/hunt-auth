@@ -131,6 +131,23 @@ class AuthForm {
   }
 }
 
+// Google OAuth sign in function
+async function signInWithGoogle() {
+  try {
+    // Redirect to Google OAuth endpoint
+    window.location.href = '/api/auth/sign-in/social/google';
+  } catch (error) {
+    console.error('Google sign in failed:', error);
+    
+    // Show error in the form if possible
+    const errorElement = document.getElementById('error-message');
+    if (errorElement) {
+      errorElement.textContent = 'Google sign in failed. Please try again.';
+      errorElement.style.display = 'block';
+    }
+  }
+}
+
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   new AuthForm();
