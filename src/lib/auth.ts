@@ -76,7 +76,7 @@ export const auth = betterAuth({
     cookieAttributes: {
       domain:
         process.env.NODE_ENV === "production" ? ".hunt-tickets.com" : undefined,
-      sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
+      sameSite: "none",
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
     },
