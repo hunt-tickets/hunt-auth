@@ -61,9 +61,12 @@ const redis = new Redis(`${process.env.REDIS_URL}?family=0`)
 
 // Check better-auth docs for more info https://www.better-auth.com/docs/
 export const auth = betterAuth({
-  emailAndPassword: {
-    enabled: true,
-  },
+  // DB config
+  database: new Pool({
+    connectionString: process.env.DATABASE_URL,
+    log: console.log,
+  }),
+
   // Session config
   session: {
     cookieCache: {
@@ -594,11 +597,7 @@ export const auth = betterAuth({
       },
     }),
   ],
-  // DB config
-  database: new Pool({
-    connectionString: process.env.DATABASE_URL,
-    log: console.log,
-  }),
+
   // This is for the redis session storage
   secondaryStorage: {
     get: async (key) => {

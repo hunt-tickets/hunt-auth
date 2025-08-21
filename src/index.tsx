@@ -10,17 +10,23 @@ import { SignInPage } from "./components/auth/SignInPage";
 const app = new Hono();
 
 // CORS configuration for mobile and web access
-app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:5500", "http://localhost:5500", "capacitor://localhost", "ionic://localhost"],
-  credentials: true,
-  allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowHeaders: ["Content-Type", "Authorization", "Cookie"],
-}));
+// Important: CORS middleware must be registered before your routes. This ensures that cross-origin requests are properly handled before they reach your authentication endpoints.
+app.use(
+  "/api/auth/*", // or replace with "*" to enable cors for all routes
+  cors({
+    origin: "http://localhost:3001", // replace with your origin
+    allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["POST", "GET", "OPTIONS"],
+    exposeHeaders: ["Content-Length"],
+    maxAge: 600,
+    credentials: true,
+  })
+);
 
 app.use(logger());
 
 // Serve static files
-app.use('/js/*', serveStatic({ root: './src/public' }));
+app.use("/js/*", serveStatic({ root: "./src/public" }));
 
 app.get("/", (c) => {
   return c.text("Hello Hono!");
@@ -33,51 +39,16 @@ app.get("/health", (c) => {
   });
 });
 
-// Authentication check endpoint for client applications
-app.get("/api/auth/check", async (c) => {
-  try {
-    const session = await auth.api.getSession({ headers: c.req.raw.headers });
-    
-    if (session) {
-      return c.json({ 
-        authenticated: true, 
-        user: session.user,
-        session: session.session 
-      });
-    } else {
-      const redirectUri = c.req.query('redirect_uri');
-      const authUrl = redirectUri 
-        ? `/auth/signin?redirect_uri=${encodeURIComponent(redirectUri)}`
-        : '/auth/signin';
-        
-      return c.json({ 
-        authenticated: false,
-        authUrl 
-      }, 401);
-    }
-  } catch (error) {
-    return c.json({ 
-      authenticated: false, 
-      error: 'Authentication check failed',
-      authUrl: '/auth/signin'
-    }, 500);
-  }
-});
-
 // JSX renderer middleware for auth pages
-app.get('/auth/*', jsxRenderer(({ children }) => (
-  <AuthLayout>{children}</AuthLayout>
-)));
+app.get(
+  "/auth/*",
+  jsxRenderer(({ children }) => <AuthLayout>{children}</AuthLayout>)
+);
 
 // Auth pages
-app.get('/auth/signin', (c) => {
-  const redirectUri = c.req.query('redirect_uri') || '/';
+app.get("/auth/signin", (c) => {
+  const redirectUri = c.req.query("redirect_uri") || "/";
   return c.render(<SignInPage redirectUri={redirectUri} />);
-});
-
-app.get('/auth/signup', (c) => {
-  const redirectUri = c.req.query('redirect_uri') || '/';
-  return c.html(`<h1>Sign Up page coming soon</h1><p>After signup, you'll be redirected to: ${redirectUri}</p>`);
 });
 
 /**

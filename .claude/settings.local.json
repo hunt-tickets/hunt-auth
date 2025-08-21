@@ -6,7 +6,8 @@
       "Bash(bun add:*)",
       "Bash(mkdir:*)",
       "Bash(mv:*)",
-      "Bash(bun run:*)"
+      "Bash(bun run:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": [],
