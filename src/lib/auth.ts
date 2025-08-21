@@ -68,20 +68,9 @@ export const auth = betterAuth({
   }),
 
   // Session config
-  session: {
-    cookieCache: {
-      enabled: true,
-      maxAge: 5 * 60,
-    },
-    cookieAttributes: {
-      domain:
-        process.env.NODE_ENV === "production" ? ".hunt-tickets.com" : undefined,
-      sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-    },
-  },
+  // ...
 
+  // Oauth
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -89,7 +78,7 @@ export const auth = betterAuth({
     },
   },
 
-  // Add your plugins here
+  // Better-auth Plugins
   plugins: [
     emailOTP({
       // Use the sendVerificationOtp() method to send an OTP to the user's email address.
@@ -593,7 +582,7 @@ export const auth = betterAuth({
       },
       // Configuraciones opcionales
       otpLength: 6,
-      expiresIn: 300, // 5 minutos
+      expiresIn: 120, // 2 minutos
       allowedAttempts: 3,
     }),
     passkey({

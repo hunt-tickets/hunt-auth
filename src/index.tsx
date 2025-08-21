@@ -12,14 +12,10 @@ const app = new Hono();
 // CORS configuration for mobile and web access
 // Important: CORS middleware must be registered before your routes. This ensures that cross-origin requests are properly handled before they reach your authentication endpoints.
 app.use(
-  "/api/*", // Enable CORS for all API routes
+  "/api/auth/*", // or replace with "*" to enable cors for all routes
   cors({
-    origin: [
-      "http://localhost:3001",
-      "http://localhost:3000",
-      "https://*.hunt-tickets.com",
-    ],
-    allowHeaders: ["Content-Type", "Authorization", "Cookie"],
+    origin: "http://localhost:3001", // replace with your origin
+    allowHeaders: ["Content-Type", "Authorization"],
     allowMethods: ["POST", "GET", "OPTIONS"],
     exposeHeaders: ["Content-Length"],
     maxAge: 600,
@@ -87,7 +83,7 @@ app.post("/api/auth/google-signin", async (c) => {
         callbackURL: `${new URL(c.req.url).origin}/api/auth/callback/google`,
       },
     });
-    
+
     return c.json(result);
   } catch (error) {
     console.error("Google sign-in error:", error);
